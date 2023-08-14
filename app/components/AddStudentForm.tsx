@@ -20,6 +20,7 @@ import { StudentValidation } from "../lib/validations/student";
 import api from "../lib/api";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 // 2. Define a submit handler.
 
@@ -34,6 +35,8 @@ const AddStudentForm = ({ student }: any) => {
     },
   });
 
+  const { toast } = useToast();
+
   const { mutate: addStudent, isLoading } = useMutation({
     mutationFn: async (formData: any) => {
       try {
@@ -45,6 +48,10 @@ const AddStudentForm = ({ student }: any) => {
     },
     onSuccess: () => {
       router.push("/");
+      toast({
+        title: "Added Student Succesfully!",
+        description: "You Added this student to the list!",
+      });
     },
   });
   function onSubmit(values: z.infer<typeof StudentValidation>) {

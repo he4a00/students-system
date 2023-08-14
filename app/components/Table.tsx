@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
 import {
   Table,
@@ -14,9 +14,12 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
+import DeleteStudentButton from "./DeleteStudentButton";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface StudentProps {
-  id: string;
+  _id: string;
   name: string;
   phoneNumber: string;
   gender: string;
@@ -44,7 +47,6 @@ export function TableDemo() {
       return api.get(`/students/?page=${page}`);
     }
   );
-  console.log(data);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -56,6 +58,7 @@ export function TableDemo() {
 
   const students = data?.data.students || [];
   const totalPages = data?.data.totalPages || 1;
+
   return (
     <div className="p-12 overflow-auto">
       <div className="pb-2">
@@ -80,7 +83,7 @@ export function TableDemo() {
             </TableHeader>
             <TableBody>
               {students?.map((student: StudentProps) => (
-                <TableRow key={student.name}>
+                <TableRow key={student._id}>
                   <TableCell width={320} className="font-medium text-white">
                     {student.name}
                   </TableCell>
@@ -96,10 +99,17 @@ export function TableDemo() {
                   <TableCell className="text-white">
                     {student.phoneNumber}
                   </TableCell>
+                  <TableCell className="text-white">{student._id}</TableCell>
 
                   <TableCell className="text-white text-right gap-4 flex justify-end">
-                    <Button variant="destructive">Delete</Button>
-                    <Button variant="secondary">Edit</Button>
+                    <DeleteStudentButton
+                      studentId={student?._id}
+                      currentPage={currentPage}
+                    />
+
+                    <Link href={`/students/${student._id}`}>
+                      <Button variant="secondary">Edit</Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
