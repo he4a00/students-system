@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import api from "../lib/api";
 import {
   Table,
   TableBody,
@@ -10,8 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useQuery } from "@tanstack/react-query";
-import api from "../lib/api";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface StudentProps {
   id: string;
@@ -40,7 +41,7 @@ export function TableDemo() {
       return data;
     },
   });
-
+  console.log(data);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -51,45 +52,54 @@ export function TableDemo() {
 
   return (
     <div className="p-12 overflow-auto">
+      <div className="p-5">
+        <Link href="/add-student">
+          <Button variant="secondary" className="">
+            Add Student
+          </Button>
+        </Link>
+      </div>
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
-        <Table>
-          <TableCaption>A list of your recent students.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Name</TableHead>
-              <TableHead>Gender</TableHead>
-              <TableHead>Teacher</TableHead>
-              <TableHead>Phone Number</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.students?.map((student: StudentProps) => (
-              <TableRow key={student.name}>
-                <TableCell className="font-medium text-white">
-                  {student.name}
-                </TableCell>
-                <TableCell className="text-white w-[200px]">
-                  {student.gender.charAt(0).toUpperCase() +
-                    student.gender.slice(1)}
-                </TableCell>
-                <TableCell className="text-white">
-                  {student.teacher.length > 0
-                    ? student.teacher[0].name
-                    : "No Teacher."}
-                </TableCell>
-                <TableCell className="text-white">
-                  {student.phoneNumber}
-                </TableCell>
-
-                <TableCell className="text-white text-right gap-4 flex justify-end">
-                  <Button variant="destructive">Delete</Button>
-                  <Button variant="secondary">Edit</Button>
-                </TableCell>
+        <div className="overflow-x-auto">
+          <Table className="min-w-full table-auto">
+            <TableCaption>A list of your recent students.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Name</TableHead>
+                <TableHead>Gender</TableHead>
+                <TableHead>Teacher</TableHead>
+                <TableHead>Phone Number</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {data.students?.map((student: StudentProps) => (
+                <TableRow key={student.name}>
+                  <TableCell className="font-medium text-white">
+                    {student.name}
+                  </TableCell>
+                  <TableCell className="text-white w-[200px]">
+                    {student.gender.charAt(0).toUpperCase() +
+                      student.gender.slice(1)}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {student.teacher.length > 0
+                      ? student.teacher[0].name
+                      : "No Teacher."}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {student.phoneNumber}
+                  </TableCell>
+
+                  <TableCell className="text-white text-right gap-4 flex justify-end">
+                    <Button variant="destructive">Delete</Button>
+                    <Button variant="secondary">Edit</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

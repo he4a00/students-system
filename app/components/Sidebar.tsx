@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 
 import { sidebarLinks } from "@/constants";
 
-const LeftSidebar = () => {
+const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <section className="sticky left-0 top-0 z-20 h-screen w-fit flex-col justify-between overflow-auto border-r-[#1F1F22] bg-[#1a1c23] pb-5 pt-28 hidden md:flex">
+    <section className="sticky left-0 top-0 z-20 h-screen w-fit flex-col justify-between overflow-auto border-r-[#1F1F22] bg-[#1a1c23] pb-5 pt-28 p-10 hidden md:flex">
       <div className="flex w-full flex-col gap-6 px-6">
         {sidebarLinks.map((link: any) => {
           const isActive =
@@ -41,4 +41,4 @@ const LeftSidebar = () => {
   );
 };
 
-export default LeftSidebar;
+export default Sidebar;
