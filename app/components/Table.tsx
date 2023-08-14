@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
 import {
   Table,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useState } from "react";
 
 interface StudentProps {
   id: string;
@@ -34,14 +35,17 @@ interface StudentProps {
 }
 
 export function TableDemo() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["students"],
-    queryFn: async () => {
-      const { data } = await api.get("/students/");
-      return data;
-    },
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isError } = useQuery(
+    ["students", currentPage],
+    ({ queryKey }: any) => {
+      const [, page] = queryKey;
+      return api.get(`/students/?page=${page}`);
+    }
+  );
   console.log(data);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -50,9 +54,11 @@ export function TableDemo() {
     return <div>Error loading students data.</div>;
   }
 
+  const students = data?.data.students || [];
+  const totalPages = data?.data.totalPages || 1;
   return (
     <div className="p-12 overflow-auto">
-      <div className="p-5">
+      <div className="pb-2">
         <Link href="/add-student">
           <Button variant="secondary" className="">
             Add Student
@@ -73,9 +79,9 @@ export function TableDemo() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.students?.map((student: StudentProps) => (
+              {students?.map((student: StudentProps) => (
                 <TableRow key={student.name}>
-                  <TableCell className="font-medium text-white">
+                  <TableCell width={320} className="font-medium text-white">
                     {student.name}
                   </TableCell>
                   <TableCell className="text-white w-[200px]">
@@ -100,6 +106,22 @@ export function TableDemo() {
             </TableBody>
           </Table>
         </div>
+      </div>
+      <div className=" flex justify-center gap-5 p-4">
+        <Button
+          variant="secondary"
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage <= 1}
+        >
+          Previous Page
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage >= totalPages}
+        >
+          Next Page
+        </Button>
       </div>
     </div>
   );

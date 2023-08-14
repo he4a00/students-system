@@ -2,11 +2,11 @@ import AddStudentForm from "@/app/components/AddStudentForm";
 
 const page = () => {
   return (
-    <div className="p-10 h-screen">
-      <h1 className="text-white text-2xl font-semibold">Add Student</h1>
-      <div>
-        <AddStudentForm />
+    <div className="flex mx-auto flex-col items-start justify-start max-w-3xl px-10 py-20 ">
+      <div className="pt-10 pb-10">
+        <h1 className="text-3xl font-bold text-white">Add Student.</h1>
       </div>
+      <AddStudentForm />
     </div>
   );
 };

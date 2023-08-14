@@ -13,20 +13,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { StudentValidation } from "../lib/validations/student";
 import api from "../lib/api";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
-// interface Student {
-//   student: {
-//     name: string;
-//     phoneNumber: string;
-//     gender: string;
-//   };
-// }
 
 // 2. Define a submit handler.
 
@@ -63,15 +56,21 @@ const AddStudentForm = ({ student }: any) => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col justify-start gap-10 w-full bg-[#101012] p-12 rounded-lg"
+      >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel className="font-semibold text-white">Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />
@@ -83,9 +82,12 @@ const AddStudentForm = ({ student }: any) => {
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone</FormLabel>
+              <FormLabel className="font-semibold text-white">Phone</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />
@@ -96,17 +98,28 @@ const AddStudentForm = ({ student }: any) => {
           control={form.control}
           name="gender"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gender</FormLabel>
+            <FormItem className="flex flex-col">
+              <FormLabel className="font-semibold text-white">Gender</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <select
+                  className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                  {...field}
+                >
+                  <option value="" disabled>
+                    Select gender
+                  </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
               </FormControl>
 
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button variant="secondary" disabled={isLoading} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
