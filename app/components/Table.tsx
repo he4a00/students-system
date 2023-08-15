@@ -99,7 +99,6 @@ export function TableDemo() {
                   <TableCell className="text-white">
                     {student.phoneNumber}
                   </TableCell>
-                  <TableCell className="text-white">{student._id}</TableCell>
 
                   <TableCell className="text-white text-right gap-4 flex justify-end">
                     <DeleteStudentButton
@@ -109,6 +108,9 @@ export function TableDemo() {
 
                     <Link href={`/students/${student._id}`}>
                       <Button variant="secondary">Edit</Button>
+                    </Link>
+                    <Link href={`/students/${student._id}`}>
+                      <Button variant="secondary">View</Button>
                     </Link>
                   </TableCell>
                 </TableRow>
