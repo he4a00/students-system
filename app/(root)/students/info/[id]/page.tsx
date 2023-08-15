@@ -2,6 +2,8 @@
 
 import AddPayementForm from "@/app/components/AddPayementForm";
 import AddTeacherForm from "@/app/components/AddTeacherForm";
+import StudentPaymentInfo from "@/app/components/StudentPaymentInfo";
+import StudentTeacherInfo from "@/app/components/StudentTeacherInfo";
 import api from "@/app/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
@@ -39,6 +41,14 @@ const StudentInfo = () => {
             </h1>
           </div>
           <AddPayementForm id={student?._id} />
+        </div>
+      </div>
+      <div className="pt-20 flex md:flex-row flex-col w-[73vw]">
+        <div>
+          <StudentPaymentInfo studentId={student?._id} />
+        </div>
+        <div>
+          <StudentTeacherInfo studentId={student?._id} />
         </div>
       </div>
     </div>
