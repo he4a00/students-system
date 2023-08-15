@@ -109,7 +109,7 @@ export function TableDemo() {
                     <Link href={`/students/${student._id}`}>
                       <Button variant="secondary">Edit</Button>
                     </Link>
-                    <Link href={`/students/${student._id}`}>
+                    <Link href={`/students/info/${student._id}`}>
                       <Button variant="secondary">View</Button>
                     </Link>
                   </TableCell>

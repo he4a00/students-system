@@ -2,62 +2,66 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { StudentValidation } from "../lib/validations/student";
 import api from "../lib/api";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { TeacherValidation } from "../lib/validations/teacher";
 
 // 2. Define a submit handler.
 
-const AddStudentForm = ({ student }: any) => {
+interface Props {
+  id: string;
+}
+
+const AddTeacherForm = ({ id }: Props) => {
   const router = useRouter();
   const form = useForm({
-    resolver: zodResolver(StudentValidation),
+    resolver: zodResolver(TeacherValidation),
     defaultValues: {
       name: "",
-      phoneNumber: "",
+      subject: "",
       gender: "",
     },
   });
 
   const { toast } = useToast();
 
-  const { mutate: addStudent, isLoading } = useMutation({
-    mutationFn: async (formData: any) => {
+  const { mutate: addTeacher, isLoading } = useMutation({
+    mutationFn: async (teacherData: any) => {
       try {
-        const { data } = await api.post("/students", formData);
+        const { data } = await api.post(
+          `/teacher/${id}/add-teacher`,
+          teacherData
+        );
         return data;
       } catch (error) {
         throw error;
       }
     },
     onSuccess: (data) => {
-      router.push(`/students/info/${data._id}`);
+      router.push("/");
       toast({
-        title: "Added Student Succesfully!",
-        description: "You Added this student to the list!",
+        title: "Added Teacher Succesfully!",
+        description: "You Added this Teacher to this Student!",
       });
     },
   });
-  function onSubmit(values: z.infer<typeof StudentValidation>) {
-    addStudent({
+  function onSubmit(values: z.infer<typeof TeacherValidation>) {
+    addTeacher({
       name: values.name,
-      phoneNumber: values.phoneNumber,
+      subject: values.subject,
       gender: values.gender,
     });
   }
@@ -86,10 +90,12 @@ const AddStudentForm = ({ student }: any) => {
         />
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name="subject"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-white">Phone</FormLabel>
+              <FormLabel className="font-semibold text-white">
+                Subject
+              </FormLabel>
               <FormControl>
                 <Input
                   className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
@@ -132,4 +138,4 @@ const AddStudentForm = ({ student }: any) => {
   );
 };
 
-export default AddStudentForm;
+export default AddTeacherForm;
