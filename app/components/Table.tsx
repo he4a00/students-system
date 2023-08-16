@@ -28,7 +28,7 @@ interface StudentProps {
     name: string;
     gender: string;
     subject: string;
-  };
+  }[];
   monthlyPayment: {
     id: string;
     month: string;
