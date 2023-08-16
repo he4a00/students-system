@@ -45,7 +45,6 @@ const StudentTeacherInfo = ({ studentId }: { studentId: string }) => {
   }
 
   const student = data?.data || [];
-  console.log(student);
 
   return (
     <div className="p-12 overflow-auto">
@@ -55,9 +54,9 @@ const StudentTeacherInfo = ({ studentId }: { studentId: string }) => {
             <TableCaption>A list of your recent students.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Month</TableHead>
-                <TableHead>Year</TableHead>
-                <TableHead>Payment</TableHead>
+                <TableHead className="w-[100px]">Name</TableHead>
+                <TableHead>Subject</TableHead>
+                <TableHead>Gender</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -69,7 +68,10 @@ const StudentTeacherInfo = ({ studentId }: { studentId: string }) => {
                   <TableCell className="text-white w-[200px]">
                     {tea?.subject}
                   </TableCell>
-                  <TableCell className="text-white">{tea.gender}</TableCell>
+                  <TableCell className="text-white">
+                    {tea.gender.charAt(0).toUpperCase() +
+                      student.gender.slice(1)}
+                  </TableCell>
                   <TableCell className="text-white"></TableCell>
                 </TableRow>
               ))}

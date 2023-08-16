@@ -53,6 +53,14 @@ const AddStudentForm = ({ student }: any) => {
         description: "You Added this student to the list!",
       });
     },
+    onError: (error: any) => {
+      if (error.response.status === 409) {
+        toast({
+          title: "this user already exists",
+          variant: "destructive",
+        });
+      }
+    },
   });
   function onSubmit(values: z.infer<typeof StudentValidation>) {
     addStudent({

@@ -2,6 +2,7 @@
 
 import AddPayementForm from "@/app/components/AddPayementForm";
 import AddTeacherForm from "@/app/components/AddTeacherForm";
+import MarkAttendanceButton from "@/app/components/MarkAttendanceButton";
 import StudentPaymentInfo from "@/app/components/StudentPaymentInfo";
 import StudentTeacherInfo from "@/app/components/StudentTeacherInfo";
 import api from "@/app/lib/api";
@@ -42,6 +43,9 @@ const StudentInfo = () => {
           </div>
           <AddPayementForm id={student?._id} />
         </div>
+      </div>
+      <div className="p-5">
+        <MarkAttendanceButton id={student?._id} />
       </div>
       <div className="pt-20 flex md:flex-row flex-col w-[73vw]">
         <div>
