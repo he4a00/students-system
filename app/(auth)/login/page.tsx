@@ -11,10 +11,7 @@ const LoginForm = () => {
 
   const { user, login }: any = useUserContext();
   const router = useRouter();
-  const existedUser = localStorage.getItem("user");
-  if (user || existedUser) {
-    router.push("/");
-  }
+
   const handleLogin = () => {
     login(username, password);
   };
