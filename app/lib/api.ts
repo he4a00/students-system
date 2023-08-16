@@ -1,5 +1,3 @@
-"use client";
-
 import axios from "axios";
 
 interface User {
@@ -16,8 +14,12 @@ interface TokenResponse {
   token: string;
 }
 
-let user = localStorage.getItem("user");
-let parsedToken = user ? (JSON.parse(user) as TokenResponse)?.token : null;
+let parsedToken = null;
+
+if (typeof window !== "undefined") {
+  const user = localStorage.getItem("user");
+  parsedToken = user ? (JSON.parse(user) as TokenResponse)?.token : null;
+}
 
 const api = axios.create({
   baseURL: "http://localhost:9090/api/", // Replace this with your API base URL
