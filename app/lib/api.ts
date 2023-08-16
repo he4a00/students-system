@@ -1,3 +1,5 @@
+"use client";
+
 import axios from "axios";
 
 interface User {
@@ -14,16 +16,11 @@ interface TokenResponse {
   token: string;
 }
 
-let parsedToken = null;
-
-if (typeof window !== "undefined") {
-  // Check if localStorage is available before trying to access it
-  const user = localStorage.getItem("user");
-  parsedToken = user ? (JSON.parse(user) as TokenResponse)?.token : null;
-}
+let user = localStorage.getItem("user");
+let parsedToken = user ? (JSON.parse(user) as TokenResponse)?.token : null;
 
 const api = axios.create({
-  baseURL: "http://localhost:9090/api/",
+  baseURL: "http://localhost:9090/api/", // Replace this with your API base URL
   headers: {
     Authorization: parsedToken ? `Bearer ${parsedToken}` : undefined,
   },
