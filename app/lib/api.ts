@@ -22,7 +22,7 @@ if (typeof window !== "undefined") {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:9090/api/", // Replace this with your API base URL
+  baseURL: "http://localhost:9090/api/",
   headers: {
     Authorization: parsedToken ? `Bearer ${parsedToken}` : undefined,
   },
