@@ -55,6 +55,14 @@ const AddPaymentForm = ({ id }: Props) => {
         description: "You Added this month payment this Student!",
       });
     },
+    onError: (error: any) => {
+      if (error.response.status === 401) {
+        toast({
+          title: "You are not authorized to perform this action.",
+          variant: "destructive",
+        });
+      }
+    },
   });
   function onSubmit(values: z.infer<typeof PaymentValidation>) {
     addTeacher({

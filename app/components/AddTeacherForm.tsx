@@ -50,12 +50,20 @@ const AddTeacherForm = ({ id }: Props) => {
         throw error;
       }
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       router.push("/");
       toast({
         title: "Added Teacher Succesfully!",
         description: "You Added this Teacher to this Student!",
       });
+    },
+    onError: (error: any) => {
+      if (error.response.status === 401) {
+        toast({
+          title: "You are not authorized to perform this action.",
+          variant: "destructive",
+        });
+      }
     },
   });
   function onSubmit(values: z.infer<typeof TeacherValidation>) {

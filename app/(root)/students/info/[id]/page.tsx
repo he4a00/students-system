@@ -3,6 +3,7 @@
 import AddPayementForm from "@/app/components/AddPayementForm";
 import AddTeacherForm from "@/app/components/AddTeacherForm";
 import MarkAttendanceButton from "@/app/components/MarkAttendanceButton";
+import StudentAttendanceInfo from "@/app/components/StudentAttendanceInfo";
 import StudentPaymentInfo from "@/app/components/StudentPaymentInfo";
 import StudentTeacherInfo from "@/app/components/StudentTeacherInfo";
 import api from "@/app/lib/api";
@@ -54,6 +55,9 @@ const StudentInfo = () => {
         <div>
           <StudentTeacherInfo studentId={student?._id} />
         </div>
+      </div>
+      <div className="p-5 w-full">
+        <StudentAttendanceInfo studentId={id} />
       </div>
     </div>
   );

@@ -22,7 +22,8 @@ if (typeof window !== "undefined") {
 }
 
 const api = axios.create({
-  baseURL: "https://students-system-api-isyj.onrender.com/api/",
+  // baseURL: "https://students-system-api-isyj.onrender.com/api/",
+  baseURL: "http://localhost:9090/api/",
   headers: {
     Authorization: parsedToken ? `Bearer ${parsedToken}` : undefined,
   },

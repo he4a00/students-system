@@ -60,6 +60,12 @@ const AddStudentForm = ({ student }: any) => {
           variant: "destructive",
         });
       }
+      if (error.response.status === 401) {
+        toast({
+          title: "You are not authorized to perform this action.",
+          variant: "destructive",
+        });
+      }
     },
   });
   function onSubmit(values: z.infer<typeof StudentValidation>) {

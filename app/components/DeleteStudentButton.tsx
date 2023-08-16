@@ -34,6 +34,14 @@ const DeleteStudentButton = ({ studentId, currentPage }: Props) => {
       });
       queryClient.invalidateQueries(["students", currentPage]);
     },
+    onError: (error: any) => {
+      if (error.response.status === 401) {
+        toast({
+          title: "You are not authorized to perform this action.",
+          variant: "destructive",
+        });
+      }
+    },
   });
   const handleDeleteStudent = (studentId: string) => {
     Swal.fire({

@@ -1,6 +1,6 @@
 "use client";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
 import {
   Table,
@@ -15,8 +15,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
 import DeleteStudentButton from "./DeleteStudentButton";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { SkeletonDemo } from "./LoadingSkelton";
 
 interface StudentProps {
   _id: string;
@@ -49,11 +48,11 @@ export function TableDemo() {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading students data.</div>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        <SkeletonDemo />
+      </div>
+    );
   }
 
   const students = data?.data.students || [];
