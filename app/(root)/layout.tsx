@@ -1,10 +1,7 @@
 import "../globals.css";
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import QueryProvider from "../components/QueryProvider";
-import Bottombar from "../components/BottomBar";
-import Sidebar from "../components/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,7 +20,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} max-h-screen bg-[#121317]`}>
         <QueryProvider>{children}</QueryProvider>
-
         <Toaster />
       </body>
     </html>
