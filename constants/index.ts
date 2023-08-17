@@ -4,11 +4,6 @@ export const sidebarLinks = [
     route: "/",
     label: "Home",
   },
-  {
-    imgURL: "/assests/student.svg",
-    route: "/students",
-    label: "Students",
-  },
 ];
 
 export const months = [

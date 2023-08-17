@@ -17,7 +17,9 @@ const Card = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center gap-10 p-10">
+        <SkeletonDemo />
+        <SkeletonDemo />
         <SkeletonDemo />
       </div>
     );
