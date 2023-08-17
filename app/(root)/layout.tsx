@@ -21,14 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} max-h-screen`}>
-        <div className="flex flex-row">
-          <Sidebar />
-          <main className="flex-grow bg-[#121317]">
-            <QueryProvider>{children}</QueryProvider>
-          </main>
-        </div>
-        <Bottombar />
+      <body className={`${inter.className} max-h-screen bg-[#121317]`}>
+        <QueryProvider>{children}</QueryProvider>
+
         <Toaster />
       </body>
     </html>

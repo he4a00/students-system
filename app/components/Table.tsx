@@ -83,39 +83,47 @@ export function TableDemo() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students?.map((student: StudentProps) => (
-                <TableRow key={student._id}>
-                  <TableCell width={320} className="font-medium text-white">
-                    {student.name}
-                  </TableCell>
-                  <TableCell className="text-white w-[200px]">
-                    {student.gender.charAt(0).toUpperCase() +
-                      student.gender.slice(1)}
-                  </TableCell>
-                  <TableCell className="text-white">
-                    {student.teacher.length > 0
-                      ? student.teacher[0].name
-                      : "No Teacher."}
-                  </TableCell>
-                  <TableCell className="text-white">
-                    {student.phoneNumber}
-                  </TableCell>
-
-                  <TableCell className="text-white text-right gap-4 flex justify-end">
-                    <DeleteStudentButton
-                      studentId={student?._id}
-                      currentPage={currentPage}
-                    />
-
-                    <Link href={`/students/${student._id}`}>
-                      <Button variant="secondary">Edit</Button>
-                    </Link>
-                    <Link href={`/students/info/${student._id}`}>
-                      <Button variant="secondary">View</Button>
-                    </Link>
+              {students.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-white">
+                    No students available yet.
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                students?.map((student: StudentProps) => (
+                  <TableRow key={student._id}>
+                    <TableCell width={320} className="font-medium text-white">
+                      {student.name}
+                    </TableCell>
+                    <TableCell className="text-white w-[200px]">
+                      {student.gender.charAt(0).toUpperCase() +
+                        student.gender.slice(1)}
+                    </TableCell>
+                    <TableCell className="text-white">
+                      {student.teacher.length > 0
+                        ? student.teacher[0].name
+                        : "No Teacher."}
+                    </TableCell>
+                    <TableCell className="text-white">
+                      {student.phoneNumber}
+                    </TableCell>
+
+                    <TableCell className="text-white text-right gap-4 flex justify-end">
+                      <DeleteStudentButton
+                        studentId={student?._id}
+                        currentPage={currentPage}
+                      />
+
+                      <Link href={`/students/${student._id}`}>
+                        <Button variant="secondary">Edit</Button>
+                      </Link>
+                      <Link href={`/students/info/${student._id}`}>
+                        <Button variant="secondary">View</Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </div>
