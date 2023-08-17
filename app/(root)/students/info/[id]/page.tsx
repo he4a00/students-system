@@ -1,5 +1,6 @@
 "use client";
 
+import AddAttendanceForm from "@/app/components/AddAttendanceForm";
 import AddPayementForm from "@/app/components/AddPayementForm";
 import AddTeacherForm from "@/app/components/AddTeacherForm";
 import MarkAttendanceButton from "@/app/components/MarkAttendanceButton";
@@ -25,8 +26,6 @@ const StudentInfo = () => {
     <div className="flex flex-col items-start justify-start max-w-3xl px-10 py-20">
       <div className="flex flex-col md:flex-row w-[73vw]">
         <div className="flex-grow pr-4 max-w-50">
-          {" "}
-          {/* Set max width */}
           <div className="pt-10 pb-10">
             <h1 className="text-3xl font-bold text-white">
               Add Teacher To Student.
@@ -35,8 +34,6 @@ const StudentInfo = () => {
           <AddTeacherForm id={student?._id} />
         </div>
         <div className="flex-grow pl-4 max-w-50">
-          {" "}
-          {/* Set max width */}
           <div className="pt-10 pb-10">
             <h1 className="text-3xl font-bold text-white">
               Add Payment To Student.
@@ -44,10 +41,18 @@ const StudentInfo = () => {
           </div>
           <AddPayementForm id={student?._id} />
         </div>
+        <div className="flex-grow pl-4 max-w-50">
+          <div className="pt-10 pb-10">
+            <h1 className="text-3xl font-bold text-white">
+              Add Payment To Student.
+            </h1>
+          </div>
+          <AddAttendanceForm id={student?._id} />
+        </div>
       </div>
-      <div className="p-5">
+      {/* <div className="p-5">
         <MarkAttendanceButton id={student?._id} />
-      </div>
+      </div> */}
       <div className="pt-20 flex md:flex-row flex-col w-[73vw]">
         <div>
           <StudentPaymentInfo studentId={student?._id} />
@@ -55,9 +60,9 @@ const StudentInfo = () => {
         <div>
           <StudentTeacherInfo studentId={student?._id} />
         </div>
-      </div>
-      <div className="p-5 w-full">
-        <StudentAttendanceInfo studentId={id} />
+        <div>
+          <StudentAttendanceInfo studentId={id} />
+        </div>
       </div>
     </div>
   );

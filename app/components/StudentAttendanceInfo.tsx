@@ -46,7 +46,10 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
   }
 
   const student = data?.data || [];
-  console.log(student);
+  const totalAbsences = student?.attendence?.reduce(
+    (count: number, att: any) => (att.present ? count + 1 : count),
+    0
+  );
   return (
     <div className="p-12 overflow-auto">
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
@@ -73,10 +76,10 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
                 );
                 return (
                   <TableRow key={att._id}>
-                    <TableCell className="text-white">
-                      {att.present ? "Absent" : "Not Absent"}
+                    <TableCell className="text-white w-[150px]">
+                      {att.present ? "Yes" : "No"}
                     </TableCell>
-                    <TableCell className="text-white text-right">
+                    <TableCell className="text-white text-right w-[250px]">
                       {formattedDate}
                     </TableCell>
                   </TableRow>
@@ -84,6 +87,11 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
               })}
             </TableBody>
           </Table>
+          <div className="p-6">
+            <h1 className="text-white font-semibold">
+              Total Absences = {totalAbsences}
+            </h1>
+          </div>
         </div>
       </div>
     </div>
