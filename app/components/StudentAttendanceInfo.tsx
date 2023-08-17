@@ -63,7 +63,6 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
             </TableHeader>
             <TableBody>
               {student?.attendence?.map((att: any) => {
-                console.log(att);
                 const formattedDate = new Date(att?.date).toLocaleDateString(
                   "en-US",
                   {
