@@ -69,8 +69,7 @@ const StudentTeacherInfo = ({ studentId }: { studentId: string }) => {
                     {tea?.subject}
                   </TableCell>
                   <TableCell className="text-white">
-                    {tea.gender.charAt(0).toUpperCase() +
-                      student.gender.slice(1)}
+                    {tea.gender.charAt(0).toUpperCase() + tea.gender.slice(1)}
                   </TableCell>
                   <TableCell className="text-white"></TableCell>
                 </TableRow>
