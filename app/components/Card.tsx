@@ -7,7 +7,7 @@ import api from "../lib/api";
 import { SkeletonDemo } from "./LoadingSkelton";
 
 const Card = () => {
-  const { data: students, isLoading } = useQuery({
+  const { data: students, isLoading: studentsLoading } = useQuery({
     queryKey: ["students"],
     queryFn: async () => {
       const { data } = await api.get("/students/");
@@ -15,7 +15,15 @@ const Card = () => {
     },
   });
 
-  if (isLoading) {
+  const { data: teachers, isLoading: teacherLoading } = useQuery({
+    queryKey: ["teachers"],
+    queryFn: async () => {
+      const { data } = await api.get("/teacher/");
+      return data;
+    },
+  });
+
+  if (studentsLoading) {
     return (
       <div className="flex items-center justify-center gap-10 p-10">
         <SkeletonDemo />
@@ -51,7 +59,7 @@ const Card = () => {
           />
           <div className="flex flex-col gap-3">
             <h5 className="text-gray-400 text-sm">Total Teachers</h5>
-            <p className="font-semibold">23</p>
+            <p className="font-semibold">{teachers?.totalTeachers}</p>
           </div>
         </div>
       </div>

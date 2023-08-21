@@ -12,30 +12,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-interface StudentProps {
-  _id: string;
-  name: string;
-  phoneNumber: string;
-  gender: string;
-  teacher: {
-    id: string;
-    name: string;
-    gender: string;
-    subject: string;
-  };
-  monthlyPayment: {
-    id: string;
-    month: string;
-    year: number;
-    isPaid: boolean;
-  };
-}
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
-  const { data, isLoading, isError } = useQuery(["students", studentId], () => {
-    return api.get(`/students/${studentId}`);
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isError } = useQuery(
+    ["attendeances", currentPage],
+    ({ queryKey }: any) => {
+      const [, page] = queryKey;
+      return api.get(`/attendence/${studentId}/attendances/?page=${page}`);
+    }
+  );
+
+  const studentAttendances = data?.data.attendences || [];
+  const totalPages = data?.data.totalPages || 1;
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -45,11 +37,10 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
     return <div>Error loading students data.</div>;
   }
 
-  const student = data?.data || [];
-  const totalAbsences = student?.attendence?.reduce(
-    (count: number, att: any) => (att.present ? count + 1 : count),
-    0
-  );
+  // const totalAbsences = attendances?.reduce(
+  //   (count: number, att: any) => (att.present ? count + 1 : count),
+  //   0
+  // );
   return (
     <div className="p-12 overflow-auto">
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
@@ -65,7 +56,7 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {student?.attendence?.map((att: any) => {
+              {studentAttendances?.map((att: any) => {
                 const formattedDate = new Date(att?.date).toLocaleDateString(
                   "en-US",
                   {
@@ -87,11 +78,27 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
               })}
             </TableBody>
           </Table>
-          <div className="p-6">
+          {/* <div className="p-6">
             <h1 className="text-white font-semibold">
               Total Absences = {totalAbsences}
             </h1>
-          </div>
+          </div> */}
+        </div>
+        <div className=" flex justify-center gap-5 p-4">
+          <Button
+            variant="secondary"
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage <= 1}
+          >
+            Previous Page
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+          >
+            Next Page
+          </Button>
         </div>
       </div>
     </div>

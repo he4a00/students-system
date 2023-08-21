@@ -100,9 +100,9 @@ export function TableDemo() {
                         student.gender.slice(1)}
                     </TableCell>
                     <TableCell className="text-white">
-                      {student.teacher.length > 0
-                        ? student.teacher[0].name
-                        : "No Teacher."}
+                      <Link href={`/students/info/${student._id}`}>
+                        View Teachers
+                      </Link>
                     </TableCell>
                     <TableCell className="text-white">
                       {student.phoneNumber}
