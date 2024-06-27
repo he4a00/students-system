@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useState } from "react";
 import DeleteStudentButton from "./DeleteStudentButton";
 import { SkeletonDemo } from "./LoadingSkelton";
+import SearchBar from "./SearchBar";
 
 interface StudentProps {
   _id: string;
@@ -38,12 +39,13 @@ interface StudentProps {
 
 export function TableDemo() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data, isLoading, isError } = useQuery(
-    ["students", currentPage],
+    ["students", currentPage, searchTerm],
     ({ queryKey }: any) => {
-      const [, page] = queryKey;
-      return api.get(`/students/?page=${page}`);
+      const [, page, name] = queryKey;
+      return api.get(`/students/?page=${page}&name=${name}`);
     }
   );
 
@@ -62,6 +64,9 @@ export function TableDemo() {
 
   return (
     <div className="p-12 overflow-auto">
+      <div className="flex justify-center">
+        <SearchBar onSearch={setSearchTerm} />
+      </div>
       <div className="pb-2">
         <Link href="/add-student">
           <Button variant="secondary" className="">

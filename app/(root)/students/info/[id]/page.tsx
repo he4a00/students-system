@@ -22,6 +22,8 @@ const StudentInfo = () => {
     return data;
   });
 
+  console.log(id);
+
   return (
     <div className="flex flex-col items-start justify-start max-w-3xl px-10 py-20">
       <div className="flex flex-col md:flex-row w-[73vw]">
@@ -41,14 +43,14 @@ const StudentInfo = () => {
           </div>
           <AddPayementForm id={student?._id} />
         </div>
-        <div className="flex-grow pl-4 max-w-50">
+        {/* <div className="flex-grow pl-4 max-w-50">
           <div className="pt-10 pb-10">
             <h1 className="text-3xl font-bold text-white">
-              Add Payment To Student.
+              Add Attendance To Student.
             </h1>
           </div>
           <AddAttendanceForm id={student?._id} />
-        </div>
+        </div> */}
       </div>
       {/* <div className="p-5">
         <MarkAttendanceButton id={student?._id} />
@@ -60,9 +62,9 @@ const StudentInfo = () => {
         <div>
           <StudentTeacherInfo studentId={student?._id} />
         </div>
-        <div>
-          <StudentAttendanceInfo studentId={id} />
-        </div>
+        {/* <div>
+          <StudentAttendanceInfo studentId={student?._id} />
+        </div> */}
       </div>
     </div>
   );

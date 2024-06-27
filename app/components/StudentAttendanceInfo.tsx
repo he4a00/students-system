@@ -19,10 +19,10 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isError } = useQuery(
-    ["attendeances", currentPage],
+    ["attendeances", currentPage, studentId],
     ({ queryKey }: any) => {
       const [, page] = queryKey;
-      return api.get(`/attendence/${studentId}/attendances/?page=${page}`);
+      return api.get(`/attendence/${studentId}/?page=${page}`);
     }
   );
 
@@ -37,10 +37,6 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
     return <div>Error loading students data.</div>;
   }
 
-  // const totalAbsences = attendances?.reduce(
-  //   (count: number, att: any) => (att.present ? count + 1 : count),
-  //   0
-  // );
   return (
     <div className="p-12 overflow-auto">
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
@@ -78,11 +74,6 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
               })}
             </TableBody>
           </Table>
-          {/* <div className="p-6">
-            <h1 className="text-white font-semibold">
-              Total Absences = {totalAbsences}
-            </h1>
-          </div> */}
         </div>
         <div className=" flex justify-center gap-5 p-4">
           <Button

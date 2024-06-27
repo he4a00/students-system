@@ -2,10 +2,6 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import { UserProvider } from "../context/UserContext";
 
-export const metadata = {
-  title: "Recipe Sharing",
-};
-
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({

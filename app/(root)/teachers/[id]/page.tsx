@@ -28,8 +28,6 @@ const TeacherInfo = () => {
     return api.get(`/teacher/${id}/students/`);
   });
 
-  console.log(studentsInfo?.data);
-
   const teacherStudents = studentsInfo?.data || [];
 
   if (isLoading) {
@@ -42,6 +40,9 @@ const TeacherInfo = () => {
 
   return (
     <div className="p-12 overflow-auto">
+      <div className="p-6 text-white font-semibold text-2xl">
+        <h1>This Teacher Students</h1>
+      </div>
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
         <div className="overflow-x-auto">
           <Table className="min-w-full table-auto">

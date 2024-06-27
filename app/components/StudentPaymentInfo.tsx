@@ -11,6 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface StudentProps {
   _id: string;
@@ -32,16 +34,26 @@ interface StudentProps {
 }
 
 const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
-  const { data, isLoading, isError } = useQuery(["students", studentId], () => {
-    return api.get(`/students/${studentId}`);
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isError } = useQuery(
+    ["payments", currentPage],
+    ({ queryKey }: any) => {
+      const [, page] = queryKey;
+      return api.get(`/payment/${studentId}/payments/?page=${page}`);
+    }
+  );
+
+  const studentPayments = data?.data.payments || [];
+
+  const totalPages = data?.data.totalPages || 1;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <h1 className="text-white">Loading...</h1>;
   }
 
   if (isError) {
-    return <div>Error loading students data.</div>;
+    return <h1 className="text-white">Error loading students data.</h1>;
   }
 
   const student = data?.data || [];
@@ -59,7 +71,7 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {student?.monthlyPayment?.map((payment: any) => (
+              {studentPayments?.map((payment: any) => (
                 <TableRow key={payment._id}>
                   <TableCell width={320} className="font-medium text-white">
                     {payment?.month}
@@ -76,6 +88,22 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
             </TableBody>
           </Table>
         </div>
+      </div>
+      <div className=" flex justify-center gap-5 p-4">
+        <Button
+          variant="secondary"
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage <= 1}
+        >
+          Previous Page
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage >= totalPages}
+        >
+          Next Page
+        </Button>
       </div>
     </div>
   );

@@ -14,10 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import api from "../lib/api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { TeacherValidation } from "../lib/validations/teacher";
+import { teachers } from "@/constants";
 
 // 2. Define a submit handler.
 
@@ -66,6 +67,7 @@ const AddTeacherForm = ({ id }: Props) => {
       }
     },
   });
+
   function onSubmit(values: z.infer<typeof TeacherValidation>) {
     addTeacher({
       name: values.name,
@@ -83,13 +85,22 @@ const AddTeacherForm = ({ id }: Props) => {
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel className="font-semibold text-white">Name</FormLabel>
               <FormControl>
-                <Input
-                  className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                <select
+                  className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
                   {...field}
-                />
+                >
+                  <option value="" disabled>
+                    Select a Teacher
+                  </option>
+                  {teachers?.map((teacher) => (
+                    <option key={teacher.name} value={teacher.name}>
+                      {teacher.name}
+                    </option>
+                  ))}
+                </select>
               </FormControl>
 
               <FormMessage />

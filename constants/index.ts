@@ -20,3 +20,24 @@ export const months = [
   { name: "November" },
   { name: "December" },
 ];
+
+export const teachers = [
+  {
+    name: "Ahmed Ebrahim",
+  },
+  {
+    name: "Ahmed Ismail",
+  },
+  {
+    name: "Jane Doe",
+  },
+  {
+    name: "Raya Saka",
+  },
+  {
+    name: "Jacop John",
+  },
+  {
+    name: "Saka Marten",
+  },
+];

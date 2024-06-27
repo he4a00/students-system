@@ -12,7 +12,6 @@ const LoginForm = () => {
   const { user, login }: any = useUserContext();
   const router = useRouter();
 
-
   if (user) {
     router.push("/");
   }
