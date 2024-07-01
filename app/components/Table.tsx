@@ -17,6 +17,16 @@ import { useState } from "react";
 import DeleteStudentButton from "./DeleteStudentButton";
 import { SkeletonDemo } from "./LoadingSkelton";
 import SearchBar from "./SearchBar";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { educationYears } from "@/constants";
 
 interface StudentProps {
   _id: string;
@@ -40,12 +50,13 @@ interface StudentProps {
 export function TableDemo() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("");
 
   const { data, isLoading, isError } = useQuery(
-    ["students", currentPage, searchTerm],
+    ["students", currentPage, searchTerm, filter],
     ({ queryKey }: any) => {
-      const [, page, name] = queryKey;
-      return api.get(`/students/?page=${page}&name=${name}`);
+      const [, page, name, eduyear] = queryKey;
+      return api.get(`/students/?eduyear=${filter}&page=${page}&name=${name}`);
     }
   );
 
@@ -67,23 +78,40 @@ export function TableDemo() {
       <div className="flex justify-center">
         <SearchBar onSearch={setSearchTerm} />
       </div>
-      <div className="pb-2">
+      <div className="pb-2 flex flex-row justify-between">
         <Link href="/add-student">
           <Button variant="secondary" className="">
-            Add Student
+            أضافة طالب
           </Button>
         </Link>
+        <Select onValueChange={setFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="اختر الصف" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>الصفوف </SelectLabel>
+              {educationYears?.map((edu) => {
+                return (
+                  <SelectItem key={edu.name} value={edu.name}>
+                    {edu.name}
+                  </SelectItem>
+                );
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
         <div className="overflow-x-auto">
           <Table className="min-w-full table-auto">
-            <TableCaption>A list of your recent students.</TableCaption>
+            <TableCaption>قائمة بأسماء الطلاب الجدد</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Name</TableHead>
-                <TableHead>Gender</TableHead>
-                <TableHead>Teacher</TableHead>
-                <TableHead>Phone Number</TableHead>
+                <TableHead className="w-[100px]">الأسم</TableHead>
+                <TableHead>النوع</TableHead>
+                <TableHead>المدرسين</TableHead>
+                <TableHead> رقم الهاتف</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -101,12 +129,11 @@ export function TableDemo() {
                       {student.name}
                     </TableCell>
                     <TableCell className="text-white w-[200px]">
-                      {student.gender.charAt(0).toUpperCase() +
-                        student.gender.slice(1)}
+                      {student.gender === "male" ? "ذكر" : "أنثي"}
                     </TableCell>
                     <TableCell className="text-white">
                       <Link href={`/students/info/${student._id}`}>
-                        View Teachers
+                        عرض المدرسين
                       </Link>
                     </TableCell>
                     <TableCell className="text-white">
@@ -120,10 +147,10 @@ export function TableDemo() {
                       />
 
                       <Link href={`/students/${student._id}`}>
-                        <Button variant="secondary">Edit</Button>
+                        <Button variant="secondary">تعديل</Button>
                       </Link>
                       <Link href={`/students/info/${student._id}`}>
-                        <Button variant="secondary">View</Button>
+                        <Button variant="secondary">عرض</Button>
                       </Link>
                     </TableCell>
                   </TableRow>
@@ -139,14 +166,14 @@ export function TableDemo() {
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage <= 1}
         >
-          Previous Page
+          الصفحة السابقة{" "}
         </Button>
         <Button
           variant="secondary"
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage >= totalPages}
         >
-          Next Page
+          الصفحة التالية{" "}
         </Button>
       </div>
     </div>

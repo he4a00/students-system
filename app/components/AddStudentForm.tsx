@@ -21,6 +21,7 @@ import api from "../lib/api";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { educationYears } from "@/constants";
 
 // 2. Define a submit handler.
 
@@ -32,6 +33,7 @@ const AddStudentForm = ({ student }: any) => {
       name: "",
       phoneNumber: "",
       gender: "",
+      eduyear: "",
     },
   });
 
@@ -73,6 +75,7 @@ const AddStudentForm = ({ student }: any) => {
       name: values.name,
       phoneNumber: values.phoneNumber,
       gender: values.gender,
+      eduyear: values.eduyear,
     });
   }
   return (
@@ -86,7 +89,7 @@ const AddStudentForm = ({ student }: any) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-white">Name</FormLabel>
+              <FormLabel className="font-semibold text-white">الأسم</FormLabel>
               <FormControl>
                 <Input
                   className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
@@ -103,7 +106,9 @@ const AddStudentForm = ({ student }: any) => {
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-white">Phone</FormLabel>
+              <FormLabel className="font-semibold text-white">
+                رقم الهاتف
+              </FormLabel>
               <FormControl>
                 <Input
                   className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
@@ -115,12 +120,41 @@ const AddStudentForm = ({ student }: any) => {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="eduyear"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel className="font-semibold text-white">
+                السنة الدراسية
+              </FormLabel>
+              <FormControl>
+                <select
+                  className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                  {...field}
+                >
+                  <option value="" disabled>
+                    اختر السنة الدراسية
+                  </option>
+                  {educationYears?.map((edu) => (
+                    <option key={edu.name} value={edu.name}>
+                      {edu.name}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="gender"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="font-semibold text-white">Gender</FormLabel>
+              <FormLabel className="font-semibold text-white">النوع</FormLabel>
               <FormControl>
                 <select
                   className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"

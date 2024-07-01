@@ -28,6 +28,7 @@ const EditStudent = () => {
             gender={student?.gender}
             name={student?.name}
             phoneNumber={student?.phoneNumber}
+            eduyear={student?.eduyear}
             studentId={student?._id}
           />
         </>

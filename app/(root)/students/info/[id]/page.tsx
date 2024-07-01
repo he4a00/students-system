@@ -9,6 +9,8 @@ import StudentPaymentInfo from "@/app/components/StudentPaymentInfo";
 import StudentTeacherInfo from "@/app/components/StudentTeacherInfo";
 import api from "@/app/lib/api";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
@@ -22,10 +24,17 @@ const StudentInfo = () => {
     return data;
   });
 
-  console.log(id);
-
   return (
     <div className="flex flex-col items-start justify-start max-w-3xl px-10 py-20">
+      <Link href="/">
+        <Image
+          className="text-white"
+          src="/assests/arrow.svg"
+          alt="students"
+          width={40}
+          height={40}
+        />
+      </Link>
       <div className="flex flex-col md:flex-row w-[73vw]">
         <div className="flex-grow pr-4 max-w-50">
           <div className="pt-10 pb-10">

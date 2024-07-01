@@ -6,5 +6,6 @@ export const StudentValidation = z.object({
     .min(3, { message: "Minimum 3 characters." })
     .max(30, { message: "Maximum 30 caracters." }),
   phoneNumber: z.string().nonempty(),
-  gender: z.string(),
+  gender: z.string().nonempty(),
+  eduyear: z.string().nonempty(),
 });

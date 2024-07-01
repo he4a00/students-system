@@ -64,7 +64,7 @@ const DeleteStudentButton = ({ studentId, currentPage }: Props) => {
       variant="destructive"
       onClick={() => handleDeleteStudent(studentId)}
     >
-      Delete
+      حذف
     </Button>
   );
 };

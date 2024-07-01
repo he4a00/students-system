@@ -1,6 +1,6 @@
 "use client";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
 import {
   Table,
@@ -37,15 +37,19 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isError } = useQuery(
-    ["payments", currentPage],
+    ["payments", studentId, currentPage],
     ({ queryKey }: any) => {
-      const [, page] = queryKey;
-      return api.get(`/payment/${studentId}/payments/?page=${page}`);
+      const [, id, page] = queryKey;
+      return api.get(`/payment/${id}/payments/?page=${page}`);
+    },
+    {
+      keepPreviousData: true,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
     }
   );
 
   const studentPayments = data?.data.payments || [];
-
   const totalPages = data?.data.totalPages || 1;
 
   if (isLoading) {
@@ -53,10 +57,9 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
   }
 
   if (isError) {
-    return <h1 className="text-white">Error loading students data.</h1>;
+    return <h1 className="text-white">Error loading students payment data.</h1>;
   }
 
-  const student = data?.data || [];
   return (
     <div className="p-12 overflow-auto">
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
@@ -89,7 +92,7 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
           </Table>
         </div>
       </div>
-      <div className=" flex justify-center gap-5 p-4">
+      <div className="flex justify-center gap-5 p-4">
         <Button
           variant="secondary"
           onClick={() => setCurrentPage(currentPage - 1)}

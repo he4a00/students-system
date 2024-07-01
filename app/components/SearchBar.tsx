@@ -18,12 +18,12 @@ const SearchBar = ({ onSearch }: any) => {
       <Input
         className="bg-[#1f1f1f] text-white font-semibold"
         type="text"
-        placeholder="Search..."
+        placeholder="ابحث عن الطالب"
         value={searchValue}
         onChange={handleInputChange}
       />
       <Button variant="secondary" onClick={handleSearchClick}>
-        Search
+        بحث
       </Button>
     </div>
   );
