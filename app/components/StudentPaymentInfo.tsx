@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { SkeletonDemo } from "./LoadingSkelton";
 
 interface StudentProps {
   _id: string;
@@ -44,7 +45,6 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
     },
     {
       keepPreviousData: true,
-      staleTime: 5 * 60 * 1000, // 5 minutes
       refetchOnWindowFocus: false,
     }
   );
@@ -53,11 +53,15 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
   const totalPages = data?.data.totalPages || 1;
 
   if (isLoading) {
-    return <h1 className="text-white">Loading...</h1>;
+    return (
+      <div className="p-8">
+        <SkeletonDemo />;
+      </div>
+    );
   }
 
   if (isError) {
-    return <h1 className="text-white">Error loading students payment data.</h1>;
+    return <h1 className="text-white">حدث خطأ في تحميل البيانات</h1>;
   }
 
   return (
@@ -65,12 +69,12 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
         <div className="overflow-x-auto">
           <Table className="min-w-full table-auto">
-            <TableCaption>A list of your recent students.</TableCaption>
+            <TableCaption>قائمة بالشهور المدفوعة الخاصة بالطالب</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Month</TableHead>
-                <TableHead>Year</TableHead>
-                <TableHead>Payment</TableHead>
+                <TableHead className="w-[100px]">الشهر</TableHead>
+                <TableHead>السنة</TableHead>
+                <TableHead>حالة الدفع</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -83,9 +87,8 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
                     {payment?.year}
                   </TableCell>
                   <TableCell className="text-white">
-                    {payment.isPaid ? "Paid" : "Not Paid"}
+                    {payment.isPaid ? "مدفوع" : "غير مدفوع"}
                   </TableCell>
-                  <TableCell className="text-white"></TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -98,14 +101,14 @@ const StudentPaymentInfo = ({ studentId }: { studentId: string }) => {
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage <= 1}
         >
-          Previous Page
+          الصفحة السابقة
         </Button>
         <Button
           variant="secondary"
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage >= totalPages}
         >
-          Next Page
+          الصفحة التالية{" "}
         </Button>
       </div>
     </div>

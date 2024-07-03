@@ -2,6 +2,6 @@ import { z } from "zod";
 
 export const PaymentValidation = z.object({
   month: z.string().nonempty(),
-  year: z.number(),
+  year: z.string(),
   isPaid: z.string(),
 });

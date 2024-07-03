@@ -2,7 +2,9 @@
 
 import AddAttendanceForm from "@/app/components/AddAttendanceForm";
 import AddPayementForm from "@/app/components/AddPayementForm";
+import AddStudentForm from "@/app/components/AddStudentForm";
 import AddTeacherForm from "@/app/components/AddTeacherForm";
+import AddTeacherToStudent from "@/app/components/AddTeacherToStudent";
 import MarkAttendanceButton from "@/app/components/MarkAttendanceButton";
 import StudentAttendanceInfo from "@/app/components/StudentAttendanceInfo";
 import StudentPaymentInfo from "@/app/components/StudentPaymentInfo";
@@ -39,27 +41,27 @@ const StudentInfo = () => {
         <div className="flex-grow pr-4 max-w-50">
           <div className="pt-10 pb-10">
             <h1 className="text-3xl font-bold text-white">
-              Add Teacher To Student.
+              اضافة المعلم للطالب
             </h1>
           </div>
-          <AddTeacherForm id={student?._id} />
+          <AddTeacherToStudent id={student?._id} />
         </div>
         <div className="flex-grow pl-4 max-w-50">
           <div className="pt-10 pb-10">
             <h1 className="text-3xl font-bold text-white">
-              Add Payment To Student.
+              اضافة الدفع الشهري للطالب
             </h1>
           </div>
           <AddPayementForm id={student?._id} />
         </div>
-        {/* <div className="flex-grow pl-4 max-w-50">
+        <div className="flex-grow pl-4 max-w-50">
           <div className="pt-10 pb-10">
             <h1 className="text-3xl font-bold text-white">
-              Add Attendance To Student.
+              اضافة الغياب للطالب
             </h1>
           </div>
           <AddAttendanceForm id={student?._id} />
-        </div> */}
+        </div>
       </div>
       {/* <div className="p-5">
         <MarkAttendanceButton id={student?._id} />
@@ -71,9 +73,9 @@ const StudentInfo = () => {
         <div>
           <StudentTeacherInfo studentId={student?._id} />
         </div>
-        {/* <div>
+        <div>
           <StudentAttendanceInfo studentId={student?._id} />
-        </div> */}
+        </div>
       </div>
     </div>
   );

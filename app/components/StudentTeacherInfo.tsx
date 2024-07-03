@@ -1,6 +1,6 @@
 "use client";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
 import {
   Table,
@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { SkeletonDemo } from "./LoadingSkelton";
 
 interface StudentProps {
   _id: string;
@@ -38,7 +39,11 @@ const StudentTeacherInfo = ({ studentId }: { studentId: string }) => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-8">
+        <SkeletonDemo />;
+      </div>
+    );
   }
 
   if (isError) {
@@ -52,12 +57,12 @@ const StudentTeacherInfo = ({ studentId }: { studentId: string }) => {
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
         <div className="overflow-x-auto">
           <Table className="min-w-full table-auto">
-            <TableCaption>A list of your recent students.</TableCaption>
+            <TableCaption>قائمة بالمدرسين الخاصين بالطالب</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Name</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Gender</TableHead>
+                <TableHead className="w-[100px]">الأسم</TableHead>
+                <TableHead>المادة</TableHead>
+                <TableHead>النوع</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

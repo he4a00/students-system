@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import api from "../lib/api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { PaymentValidation } from "../lib/validations/payment";
@@ -32,12 +32,13 @@ const AddPaymentForm = ({ id }: Props) => {
     resolver: zodResolver(PaymentValidation),
     defaultValues: {
       month: "",
-      year: 2023,
+      year: "",
       isPaid: "",
     },
   });
 
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { mutate: addTeacher, isLoading } = useMutation({
     mutationFn: async (teacherData: any) => {
@@ -49,7 +50,7 @@ const AddPaymentForm = ({ id }: Props) => {
       }
     },
     onSuccess: () => {
-      router.push("/");
+      queryClient.invalidateQueries({ queryKey: ["payments"] });
       toast({
         title: "Payment Added Succesfully!",
         description: "You Added this month payment this Student!",
@@ -82,14 +83,14 @@ const AddPaymentForm = ({ id }: Props) => {
           name="month"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="font-semibold text-white">Month</FormLabel>
+              <FormLabel className="font-semibold text-white">الشهر</FormLabel>
               <FormControl>
                 <select
                   className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
                   {...field}
                 >
                   <option value="" disabled>
-                    Select a month
+                    اختر الشهر
                   </option>
                   {months.map((month, index) => (
                     <option key={index} value={month.name}>
@@ -107,13 +108,18 @@ const AddPaymentForm = ({ id }: Props) => {
           control={form.control}
           name="year"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-semibold text-white">Year</FormLabel>
+            <FormItem className="flex flex-col">
+              <FormLabel className="font-semibold text-white">السنة</FormLabel>
               <FormControl>
-                <Input
-                  className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                <select
+                  className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
                   {...field}
-                />
+                >
+                  <option value="" disabled>
+                    اختر السنة
+                  </option>
+                  <option value="2024">2024</option>
+                </select>
               </FormControl>
 
               <FormMessage />
@@ -126,7 +132,7 @@ const AddPaymentForm = ({ id }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel className="font-semibold text-white">
-                Is Paid
+                حالة الدفع
               </FormLabel>
               <FormControl>
                 <select
@@ -134,10 +140,10 @@ const AddPaymentForm = ({ id }: Props) => {
                   {...field}
                 >
                   <option value="" disabled>
-                    Select payment status
+                    اختر حالة الدفع
                   </option>
-                  <option value="true">True</option>
-                  <option value="false">False</option>
+                  <option value="true">مدفوع</option>
+                  <option value="false">غير مدفوع</option>
                 </select>
               </FormControl>
 
@@ -146,7 +152,7 @@ const AddPaymentForm = ({ id }: Props) => {
           )}
         />
         <Button variant="secondary" disabled={isLoading} type="submit">
-          Submit
+          اضافة
         </Button>
       </form>
     </Form>

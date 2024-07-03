@@ -78,12 +78,19 @@ export function TableDemo() {
       <div className="flex justify-center">
         <SearchBar onSearch={setSearchTerm} />
       </div>
-      <div className="pb-2 flex flex-row justify-between">
-        <Link href="/add-student">
-          <Button variant="secondary" className="">
-            أضافة طالب
-          </Button>
-        </Link>
+      <div className="pb-2 flex flex-row justify-between gap-5">
+        <div className="flex gap-5">
+          <Link href="/add-student">
+            <Button variant="secondary" className="">
+              أضافة طالب
+            </Button>
+          </Link>
+          <Link href="/teachers/add-teacher">
+            <Button variant="secondary" className="">
+              أضافة مدرس
+            </Button>
+          </Link>
+        </div>
         <Select onValueChange={setFilter}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="اختر الصف" />

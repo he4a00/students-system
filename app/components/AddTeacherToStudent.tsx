@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,43 +12,80 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { useForm } from "react-hook-form";
 import api from "../lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { AttendancValidation } from "../lib/validations/attendance";
+import { educationYears } from "@/constants";
+import { TeacherToStudentValidation } from "../lib/validations/teacher";
+
+type Props = {
+  id: string;
+};
+
+interface TeacherProps {
+  _id: string;
+  name: string;
+  gender: string;
+  subject: string;
+  schedule: [
+    {
+      _id: string;
+      day: string;
+      startTime: string;
+      endTime: string;
+    }
+  ];
+}
 
 // 2. Define a submit handler.
 
-interface Props {
-  id: string;
-}
-
-const AddAttendanceForm = ({ id }: Props) => {
-  const router = useRouter();
+const AddTeacherToStudent = ({ id }: Props) => {
   const form = useForm({
-    resolver: zodResolver(AttendancValidation),
+    resolver: zodResolver(TeacherToStudentValidation),
     defaultValues: {
-      present: "false",
+      name: "",
+    },
+  });
+
+  // getting all teacher
+
+  const { data: teachers, isLoading: teachersLoading } = useQuery({
+    queryKey: ["teachers"],
+    queryFn: async () => {
+      const { data } = await api.get("/teacher");
+      return data;
     },
   });
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { mutate: markAttendeance, isLoading } = useMutation({
-    mutationFn: async (atttendanceData: any) => {
-      const { data } = await api.post(`/attendence/${id}`, atttendanceData);
-      return data;
+  const { mutate: addTeacherToStudent, isLoading } = useMutation({
+    mutationFn: async (formData: any) => {
+      try {
+        const { data } = await api.post(
+          `/teacher/${id}/add-teacher-student`,
+          formData
+        );
+        return data;
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["attendeances"] });
+      queryClient.invalidateQueries({ queryKey: ["teachers"] });
+      toast({
+        title: "Added Student Succesfully!",
+        description: "You Added this student to the list!",
+      });
     },
     onError: (error: any) => {
       if (error.response.status === 409) {
         toast({
-          title: "the attendance already marked for this user in this date",
+          title: "this user already exists",
           variant: "destructive",
         });
       }
@@ -59,9 +97,9 @@ const AddAttendanceForm = ({ id }: Props) => {
       }
     },
   });
-  function onSubmit(values: z.infer<typeof AttendancValidation>) {
-    markAttendeance({
-      present: values.present,
+  function onSubmit(values: z.infer<typeof TeacherToStudentValidation>) {
+    addTeacherToStudent({
+      name: values.name,
     });
   }
   return (
@@ -72,11 +110,11 @@ const AddAttendanceForm = ({ id }: Props) => {
       >
         <FormField
           control={form.control}
-          name="present"
+          name="name"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel className="font-semibold text-white">
-                حالة الغياب
+                اسم المدرس{" "}
               </FormLabel>
               <FormControl>
                 <select
@@ -84,10 +122,13 @@ const AddAttendanceForm = ({ id }: Props) => {
                   {...field}
                 >
                   <option value="" disabled>
-                    اختر حالة الغياب
+                    اختر المدرس
                   </option>
-                  <option value="true">نعم</option>
-                  <option value="false">لا</option>
+                  {teachers?.teachers?.map((teacher: TeacherProps) => (
+                    <option key={teacher.name} value={teacher.name}>
+                      {teacher.name}
+                    </option>
+                  ))}
                 </select>
               </FormControl>
 
@@ -95,12 +136,13 @@ const AddAttendanceForm = ({ id }: Props) => {
             </FormItem>
           )}
         />
+
         <Button variant="secondary" disabled={isLoading} type="submit">
-          Submit
+          اضافة
         </Button>
       </form>
     </Form>
   );
 };
 
-export default AddAttendanceForm;
+export default AddTeacherToStudent;

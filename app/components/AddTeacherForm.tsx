@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import api from "../lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -20,13 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { TeacherValidation } from "../lib/validations/teacher";
 import { teachers } from "@/constants";
 
-// 2. Define a submit handler.
-
-interface Props {
-  id: string;
-}
-
-const AddTeacherForm = ({ id }: Props) => {
+const AddTeacherForm = () => {
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(TeacherValidation),
@@ -34,7 +28,13 @@ const AddTeacherForm = ({ id }: Props) => {
       name: "",
       subject: "",
       gender: "",
+      schedule: [{ day: "", startTime: "", endTime: "" }],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "schedule",
   });
 
   const { toast } = useToast();
@@ -42,10 +42,7 @@ const AddTeacherForm = ({ id }: Props) => {
   const { mutate: addTeacher, isLoading } = useMutation({
     mutationFn: async (teacherData: any) => {
       try {
-        const { data } = await api.post(
-          `/teacher/${id}/add-teacher`,
-          teacherData
-        );
+        const { data } = await api.post(`/teacher/add-teacher`, teacherData);
         return data;
       } catch (error) {
         throw error;
@@ -54,14 +51,13 @@ const AddTeacherForm = ({ id }: Props) => {
     onSuccess: () => {
       router.push("/");
       toast({
-        title: "Added Teacher Succesfully!",
-        description: "You Added this Teacher to this Student!",
+        title: "تم اضافة المدرس بنجاح",
       });
     },
     onError: (error: any) => {
       if (error.response.status === 401) {
         toast({
-          title: "You are not authorized to perform this action.",
+          title: "غير مسموح لك بفعل هذا الحدث",
           variant: "destructive",
         });
       }
@@ -73,6 +69,7 @@ const AddTeacherForm = ({ id }: Props) => {
       name: values.name,
       subject: values.subject,
       gender: values.gender,
+      schedule: values.schedule,
     });
   }
   return (
@@ -86,21 +83,12 @@ const AddTeacherForm = ({ id }: Props) => {
           name="name"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="font-semibold text-white">Name</FormLabel>
+              <FormLabel className="font-semibold text-white">الأسم</FormLabel>
               <FormControl>
-                <select
-                  className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                <Input
+                  className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
                   {...field}
-                >
-                  <option value="" disabled>
-                    Select a Teacher
-                  </option>
-                  {teachers?.map((teacher) => (
-                    <option key={teacher.name} value={teacher.name}>
-                      {teacher.name}
-                    </option>
-                  ))}
-                </select>
+                />
               </FormControl>
 
               <FormMessage />
@@ -112,9 +100,7 @@ const AddTeacherForm = ({ id }: Props) => {
           name="subject"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-white">
-                Subject
-              </FormLabel>
+              <FormLabel className="font-semibold text-white">المادة</FormLabel>
               <FormControl>
                 <Input
                   className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
@@ -149,8 +135,91 @@ const AddTeacherForm = ({ id }: Props) => {
             </FormItem>
           )}
         />
+        <div className="flex flex-col gap-4">
+          <FormLabel className="font-semibold text-white">الجدول</FormLabel>
+          {fields.map((item, index) => (
+            <div key={item.id} className="flex flex-col gap-2">
+              <FormField
+                control={form.control}
+                name={`schedule.${index}.day`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold text-white">
+                      Day
+                    </FormLabel>
+                    <FormControl>
+                      <select
+                        className="border border-[#1F1F22] bg-[#121417] text-white p-2 pr-8 !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                        {...field}
+                      >
+                        <option value="" disabled>
+                          Select day
+                        </option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`schedule.${index}.startTime`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold text-white">
+                      Start Time
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="time"
+                        className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`schedule.${index}.endTime`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold text-white">
+                      End Time
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="time"
+                        className="border border-[#1F1F22] bg-[#121417] text-white  !important focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button variant="destructive" onClick={() => remove(index)}>
+                Remove Schedule
+              </Button>
+            </div>
+          ))}
+          <Button
+            variant="secondary"
+            onClick={() => append({ day: "", startTime: "", endTime: "" })}
+          >
+            Add Schedule
+          </Button>
+        </div>
         <Button variant="secondary" disabled={isLoading} type="submit">
-          Submit
+          اضافة
         </Button>
       </form>
     </Form>

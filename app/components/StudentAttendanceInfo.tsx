@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { SkeletonDemo } from "./LoadingSkelton";
 
 const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +31,11 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
   const totalPages = data?.data.totalPages || 1;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-8">
+        <SkeletonDemo />;
+      </div>
+    );
   }
 
   if (isError) {
@@ -42,32 +47,40 @@ const StudentAttendanceInfo = ({ studentId }: { studentId: string }) => {
       <div className="max-h-[calc(100vh-160px)] overflow-auto">
         <div className="overflow-x-auto">
           <Table className="min-w-full table-auto">
-            <TableCaption>
-              A list of your recent students attendance.
-            </TableCaption>
+            <TableCaption>قائمة بالغياب الخاص بالطالب</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[150px]">Absence</TableHead>
-                <TableHead className="text-right">Date</TableHead>
+                <TableHead className="w-[150px]">الغياب</TableHead>
+                <TableHead className="text-right">التاريخ</TableHead>
+                <TableHead className="text-right">اليوم</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {studentAttendances?.map((att: any) => {
                 const formattedDate = new Date(att?.date).toLocaleDateString(
-                  "en-US",
+                  "ar-EG",
                   {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
                   }
                 );
+                const dayOfWeek = new Date(att?.date).toLocaleDateString(
+                  "ar-EG",
+                  {
+                    weekday: "long",
+                  }
+                );
                 return (
                   <TableRow key={att._id}>
                     <TableCell className="text-white w-[150px]">
-                      {att.present ? "Yes" : "No"}
+                      {att.present ? "غائب" : "حاضر"}
                     </TableCell>
                     <TableCell className="text-white text-right w-[250px]">
                       {formattedDate}
+                    </TableCell>
+                    <TableCell className="text-white text-right w-[250px]">
+                      {dayOfWeek}
                     </TableCell>
                   </TableRow>
                 );
